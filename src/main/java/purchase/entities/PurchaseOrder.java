@@ -1,9 +1,9 @@
-package purchase;
+package purchase.entities;
 
 import lombok.Data;
 
 @Data
-class Purchase {
+public class PurchaseOrder {
 
     private Long id;
     private Long buyerId;

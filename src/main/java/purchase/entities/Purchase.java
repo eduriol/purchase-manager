@@ -1,13 +1,13 @@
-package purchase;
+package purchase.entities;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-class Order {
+public class Purchase {
 
-    private String orderNumber;
+    private String purchaseNumber;
     private String itemTitle;
 
 }

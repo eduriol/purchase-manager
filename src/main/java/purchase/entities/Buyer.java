@@ -1,15 +1,15 @@
-package purchase;
+package purchase.entities;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-class Buyer {
+public class Buyer {
 
     private Long id;
     private String name;
-    private Order[] purchasedItems;
+    private Purchase[] purchasedItems;
     private Store preferredStore;
 
 }

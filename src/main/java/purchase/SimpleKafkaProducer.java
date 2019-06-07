@@ -19,6 +19,13 @@ public class SimpleKafkaProducer {
         InputStream input = new FileInputStream("src/main/resources/kafka.properties");
         Properties producerProperties = new Properties();
         producerProperties.load(input);
+        String environment = "";
+        if (System.getProperty("environment") != null) {
+            environment = System.getProperty("environment");
+        }
+        if (environment.equals("compose")) {
+            producerProperties.setProperty("bootstrap.servers", "kafka1:19092");
+        }
         kafkaProducer = new KafkaProducer<>(producerProperties);
     }
 

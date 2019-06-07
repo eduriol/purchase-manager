@@ -19,8 +19,8 @@ public class PurchaseOrderController {
     @PostMapping("/purchase")
     void addPurchase(@RequestBody PurchaseOrder newPurchaseOrder) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
-        Buyer buyer = restTemplate.getForObject("http://localhost:8081/buyer-manager/buyer/" + newPurchaseOrder.getBuyerId(), Buyer.class);
-        Item item = restTemplate.getForObject("http://localhost:8082/item-manager/item/" + newPurchaseOrder.getItemId(), Item.class);
+        Buyer buyer = restTemplate.getForObject(getEndpointBuyerManager() + newPurchaseOrder.getBuyerId(), Buyer.class);
+        Item item = restTemplate.getForObject(getEndpointItemManager() + newPurchaseOrder.getItemId(), Item.class);
         List<Purchase> oldPurchasedItems;
         String nextPurchaseNumber;
         if (buyer.getPurchasedItems() != null) {
@@ -47,6 +47,31 @@ public class PurchaseOrderController {
         Gson gson = new Gson();
         simpleKafkaProducer.sendKafkaMessage(gson.toJson(newBuyer), "add-purchase-topic");
     }
+
+    private String getEndpointBuyerManager() {
+        String environment = "";
+        if (System.getProperty("environment") != null) {
+            environment = System.getProperty("environment");
+        }
+        if (environment.equals("compose")) {
+            return "http://buyer-manager-container:8081/buyer-manager/buyer/";
+        } else {
+            return "http://localhost:8081/buyer-manager/buyer/";
+        }
+    }
+
+    private String getEndpointItemManager() {
+        String environment = "";
+        if (System.getProperty("environment") != null) {
+            environment = System.getProperty("environment");
+        }
+        if (environment.equals("compose")) {
+            return "http://item-manager-container:8082/item-manager/item/";
+        } else {
+            return "http://localhost:8082/item-manager/item/";
+        }
+    }
+
 
     private String getNextPurchaseNumber(Buyer buyer) {
         int nextPurchaseNumber = 0;

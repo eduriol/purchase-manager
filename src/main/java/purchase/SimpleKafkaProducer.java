@@ -31,6 +31,12 @@ public class SimpleKafkaProducer {
 
     public void sendKafkaMessage(String payload, String topic) {
         LOGGER.info("Sending Kafka message: " + payload);
+        // Before sending the message we simulate a delay in Kafka processing of 20 seconds
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         kafkaProducer.send(new ProducerRecord<>(topic, payload));
     }
 
